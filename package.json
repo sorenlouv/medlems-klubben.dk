@@ -1,6 +1,6 @@
 {
   "name": "public",
-  "homepage": "https://sqren.github.io/medlemsklubben.dk/",
+  "homepage": "https://medlemsklubben.dk/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
