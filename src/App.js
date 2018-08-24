@@ -37,6 +37,7 @@ class App extends Component {
           closeModal={this.closeModal}
           isModalVisible={this.state.isModalVisible}
         />
+
         <div className="App-container">
           <div className="left-container">
             <h2>Hvordan virker Medlemsklubben?</h2>
@@ -46,12 +47,11 @@ class App extends Component {
               <li>Første måned gratis - ingen binding</li>
             </ul>
             <p>For at undgå svindel beder vi dig logge ind med NemId.</p>
-
             <div className="signup-container">
               {this.state.isNemIdVisible ? <NemIdLogin /> : signupButton}
             </div>
           </div>
-          <div>
+          <div className="deal-photo">
             <img src="./membership-deals.jpg" alt="" />
           </div>
         </div>

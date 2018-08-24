@@ -18,6 +18,7 @@ export default function({ isModalVisible, closeModal, content }) {
           bottom: 'auto',
           marginRight: '-50%',
           width: '50%',
+          minWidth: '250px',
           transform: 'translate(-50%, -50%)'
         }
       }}

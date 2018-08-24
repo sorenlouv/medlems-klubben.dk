@@ -11,6 +11,11 @@
   padding: 20px;
   background: white;
   border-radius: 10px;
+  overflow: hidden;
+}
+
+.deal-photo img {
+  width: 100%;
 }
 
 .left-container {
@@ -36,4 +41,14 @@
   color: #eee;
   padding: 10px;
   text-align: center;
+}
+
+@media (max-width: 700px) {
+  .App-container {
+    display: block;
+  }
+  .left-container {
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
 }
