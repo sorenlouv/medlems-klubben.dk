@@ -30,7 +30,7 @@ class NemIdLogin extends Component {
   };
 
   login = async (username, password) => {
-    const resp = await fetch('http://localhost:4000/', {
+    const resp = await fetch('https://medlemsklubben-dk.appspot.com/', {
       method: 'post',
       body: JSON.stringify({ username, password }),
       headers: {
