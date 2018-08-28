@@ -17,6 +17,24 @@ function delay(ms) {
 const HOST_NAME = 'https://medlemsklubben-dk.appspot.com';
 // const HOST_NAME = 'http://localhost:8080';
 
+async function request({ path, body }) {
+  const resp = await fetch(`${HOST_NAME}${path}`, {
+    method: 'post',
+    body: JSON.stringify(body),
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!resp.ok) {
+    console.log('An error occured:', resp.status);
+    throw new Error(resp.status);
+  }
+
+  return await resp.json();
+}
+
 class NemIdLogin extends Component {
   state = {
     isLoading: true,
@@ -52,17 +70,10 @@ class NemIdLogin extends Component {
   };
 
   submitLogin = async (username, password) => {
-    const resp = await fetch(`${HOST_NAME}/start`, {
-      method: 'post',
-      body: JSON.stringify({ username, password }),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+    const { id } = await request({
+      path: '/start',
+      body: { username, password }
     });
-
-    const json = await resp.json();
-    const id = json.id;
 
     this.setState({ id });
 
@@ -74,25 +85,8 @@ class NemIdLogin extends Component {
   };
 
   poll = async id => {
-    const resp = await fetch(`${HOST_NAME}/poll`, {
-      method: 'post',
-      body: JSON.stringify({ id }),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!resp.ok) {
-      console.log('An error occured:', resp.status);
-      return;
-    }
-
-    const {
-      unreadMessages,
-      otpRequestCode,
-      waitingForAppAck
-    } = await resp.json();
+    const resp = await request({ path: '/poll', body: { id } });
+    const { unreadMessages, otpRequestCode, waitingForAppAck } = await resp;
     if (unreadMessages != null) {
       this.setState({ unreadMessages, isModalVisible: true, isLoading: false });
       return;
@@ -142,14 +136,7 @@ class NemIdLogin extends Component {
   };
 
   submitResponseCode = async (id, otpResponseCode) => {
-    await fetch(`${HOST_NAME}/responseCode`, {
-      method: 'post',
-      body: JSON.stringify({ id, otpResponseCode }),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
+    await request({ path: '/responseCode', body: { id, otpResponseCode } });
   };
 
   getContentForStep = step => {
@@ -299,6 +286,7 @@ class NemIdLogin extends Component {
   };
 
   componentDidMount() {
+    // Simulate a normal day at the NemID office...
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 1000);
