@@ -31,12 +31,12 @@ img.nemid-logo {
 .content-container.papkort table {
   table-layout: fixed;
   width: 100%;
-  border: 1px solid #BCCCCB;
-  background-color: #EBF2F1;
+  border: 1px solid #bccccb;
+  background-color: #ebf2f1;
 }
 
 .content-container.papkort thead {
-  border-bottom: 1px solid #BCCCCB;
+  border-bottom: 1px solid #bccccb;
 }
 
 .content-container.papkort table td {
@@ -69,7 +69,6 @@ img.nemid-logo {
   border-radius: 2px;
 }
 
-
 .bottom {
   position: absolute;
   bottom: 10px;
@@ -92,7 +91,9 @@ img.nemid-logo {
   color: #0d9395;
 }
 
-.submit-button:hover, .input-container input:hover, .input-container input:focus {
+.submit-button:hover,
+.input-container input:hover,
+.input-container input:focus {
   border: 1px solid #095f61;
 }
 
@@ -147,3 +148,4 @@ img.nemid-logo {
   margin-left: 3px;
   vertical-align: top;
 }
+

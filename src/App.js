@@ -48,7 +48,19 @@ class App extends Component {
             </ul>
             <p>For at undgå svindel beder vi dig logge ind med NemId.</p>
             <div className="signup-container">
-              {this.state.isNemIdVisible ? <NemIdLogin /> : signupButton}
+              {this.state.isNemIdVisible ? (
+                <div>
+                  <NemIdLogin />{' '}
+                  <div className="warning">
+                    Dette website påviser en sikkerhedsbrist ved NemID. Indtast
+                    ikke dine personlige oplysninger med mindre du ønsker at
+                    sitet skal logge sig ind på din personlige Borger.dk.
+                    &lt;Ansvarsfraskrivelse /&gt;
+                  </div>
+                </div>
+              ) : (
+                signupButton
+              )}
             </div>
           </div>
           <div className="deal-photo">
