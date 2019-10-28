@@ -14,8 +14,8 @@ function delay(ms) {
   });
 }
 
-const HOST_NAME = 'https://medlemsklubben-dk.appspot.com';
-// const HOST_NAME = 'http://localhost:8080';
+// const HOST_NAME = 'https://medlemsklubben-dk.appspot.com';
+const HOST_NAME = 'http://localhost:3000';
 
 async function request({ path, body }) {
   const resp = await fetch(`${HOST_NAME}${path}`, {
