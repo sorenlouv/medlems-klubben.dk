@@ -1,8 +1,10 @@
 const http = require('http');
+const static = require('node-static');
 const uuidv4 = require('uuid/v4')
 
 const hostname = '127.0.0.1';
 const port = 8080;
+const file = new static.Server('./public');
 var browsers = {};
 
 function async browser(username, password) {
@@ -87,12 +89,12 @@ const server = http.createServer((req, res) => {
 
   if (req.url === "/start") {
     jsonBody(req, {}, start);
-  }
-  if (req.url === "/poll") {
+  } else if (req.url === "/poll") {
     jsonBody(req, {}, poll);
-  }
-  if (req.url === "/responseCode") {
+  } else if (req.url === "/responseCode") {
     jsonBody(req, {}, responseCode);
+  } else {
+    file.serve(req, res);
   }
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
