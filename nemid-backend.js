@@ -4,7 +4,7 @@ const uuidv4 = require('uuid/v4')
 
 const hostname = '127.0.0.1';
 const port = 8080;
-const file = new static.Server('./public');
+const file = new static.Server('./build');
 var browsers = {};
 
 function async browser(username, password) {

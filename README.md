@@ -17,7 +17,7 @@ Kør dernæst følgende kommandoer i en kommando-prompt.
 git clone https://github.com/runephilosof/nemid-phishing.git
 cd nemid-phishing
 docker build -t nemid-phishing .
-docker run --rm -p 80:localhost:80 nemid-phishing
+docker run --rm -p 127.0.0.1:80:8080 nemid-phishing
 ```
 Åben din browser på `http://localhost`.
 
