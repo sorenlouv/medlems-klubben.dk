@@ -5,7 +5,7 @@ const hostname = '127.0.0.1';
 const port = 8080;
 var browsers = {};
 
-function browser(username, password) {
+function async browser(username, password) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
@@ -20,7 +20,7 @@ function browser(username, password) {
   return page;
 }
 
-function otpRequest(page) {
+function async otpRequest(page) {
   const frame = page.frames().find(frame => frame.name() === 'nemid_iframe');
   await frame.waitForSelector('button', { visible: true, timeout: 2000 });
   otp = await frame.querySelector('input.otp-input:focus', { visible: true });
@@ -33,7 +33,7 @@ function otpRequest(page) {
   return otp_query;
 }
 
-function submitOTP(code) {
+function async submitOTP(code) {
   await page.keyboard.type(code);
   await page.keyboard.press('Enter');
 }
