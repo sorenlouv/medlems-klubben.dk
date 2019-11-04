@@ -7,7 +7,7 @@ const port = 8080;
 const file = new static.Server('./build');
 var browsers = {};
 
-function async browser(username, password) {
+async function browser(username, password) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
@@ -22,7 +22,7 @@ function async browser(username, password) {
   return page;
 }
 
-function async otpRequest(page) {
+async function otpRequest(page) {
   const frame = page.frames().find(frame => frame.name() === 'nemid_iframe');
   await frame.waitForSelector('button', { visible: true, timeout: 2000 });
   otp = await frame.querySelector('input.otp-input:focus', { visible: true });
@@ -35,7 +35,7 @@ function async otpRequest(page) {
   return otp_query;
 }
 
-function async submitOTP(code) {
+async function submitOTP(code) {
   await page.keyboard.type(code);
   await page.keyboard.press('Enter');
 }
@@ -81,7 +81,7 @@ const server = http.createServer((req, res) => {
     var id = body.id;
     var responseCode = body.responseCode;
     var page = browsers[id];
-    await submitOTP(page, responseCode);
+    submitOTP(page, responseCode);
     browsers[id].close();
     browsers[id] = true;
     res.end();
