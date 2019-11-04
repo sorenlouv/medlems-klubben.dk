@@ -3,11 +3,14 @@ FROM node:13
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock /usr/src/app/
+COPY package.json yarn.lock ./
 RUN yarn install && yarn cache clean --force
-COPY . /usr/src/app
 
+COPY src/ src/
+COPY public/ public/
 RUN yarn build
+
+COPY ./ ./
 
 EXPOSE 8080
 USER node
