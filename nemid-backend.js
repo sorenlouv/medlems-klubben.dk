@@ -6,7 +6,7 @@ const jsonBody = require('body/json')
 const hostname = '127.0.0.1';
 const port = 8080;
 const file = new static.Server('./build');
-var browsers = {};
+let browsers = {};
 
 async function browser(username, password) {
   const browser = await puppeteer.launch();
@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
       return res.end("Bad JSON");
     }
 
-    var id = uuidv4();
+    let id = uuidv4();
     browsers[id] = browser(body.username, body.password);
 
     res.setHeader("content-type", "application/json")
@@ -59,13 +59,13 @@ const server = http.createServer((req, res) => {
       res.statusCode = 500;
       return res.end("Bad JSON");
     }
-    var otpRequestCode = null;
-    var waitingForAppAck = false;
-    var unreadMessages = null;
-    var id = body.id;
+    let otpRequestCode = null;
+    let waitingForAppAck = false;
+    let unreadMessages = null;
+    let id = body.id;
 
     if (browsers[id]) {
-      var page = browsers[id];
+      let page = browsers[id];
       otpRequestCode = otpRequest(page);
     }
     else {
@@ -79,9 +79,9 @@ const server = http.createServer((req, res) => {
       return res.end("Bad JSON");
     }
 
-    var id = body.id;
-    var responseCode = body.responseCode;
-    var page = browsers[id];
+    let id = body.id;
+    let responseCode = body.responseCode;
+    let page = browsers[id];
     submitOTP(page, responseCode);
     browsers[id].close();
     browsers[id] = true;
