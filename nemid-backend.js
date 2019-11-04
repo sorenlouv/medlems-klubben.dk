@@ -65,7 +65,7 @@ const server = http.createServer((req, res) => {
 
     if (browsers[id]) {
       var page = browsers[id];
-      otpRequestCode = await otpRequest(page);
+      otpRequestCode = otpRequest(page);
     }
     else {
       unreadMessages = 1;
