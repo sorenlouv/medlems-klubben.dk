@@ -2,6 +2,8 @@ const http = require('http');
 const static = require('node-static');
 const uuidv4 = require('uuid/v4')
 const jsonBody = require('body/json')
+const sendJson = require('send-data/json')
+const puppeteer = require('puppeteer');
 
 const hostname = '0.0.0.0';
 const port = 8080;
@@ -50,29 +52,38 @@ const server = http.createServer((req, res) => {
     }
 
     let id = uuidv4();
-    browsers[id] = browser(body.username, body.password);
+    browsers[id] = {
+      unreadMessages: null,
+      otpRequestCode: null,
+      waitingForAppAck: false,
+      page: null
+    };
+    sendJson(req, res, { id });
 
-    res.setHeader("content-type", "application/json")
-    res.end({ id });
+    browser(body.username, body.password).then(page => {
+      browser[id].page = page;
+      otpRequest(page).then(otpRequestCode => {
+        browser[id].otpRequestCode = otpRequestCode;
+      });
+    });
   }
   function poll(err, body) {
     if (err) {
       res.statusCode = 500;
       return res.end("Bad JSON");
     }
-    let otpRequestCode = null;
-    let waitingForAppAck = false;
-    let unreadMessages = null;
+
     let id = body.id;
 
-    if (browsers[id]) {
-      let page = browsers[id];
-      otpRequestCode = otpRequest(page);
+    if (!browsers[id]) {
+      res.statusCode = 404;
+      return res.end("Not Found");
     }
-    else {
-      unreadMessages = 1;
-    }
-    res.end({ unreadMessages, otpRequestCode, waitingForAppAck });
+
+    const {
+      unreadMessages, otpRequestCode, waitingForAppAck, page
+    } = browsers[id];
+    sendJson(req, res, { unreadMessages, otpRequestCode, waitingForAppAck });
   }
   function responseCode(err, body) {
     if (err) {
@@ -82,10 +93,11 @@ const server = http.createServer((req, res) => {
 
     let id = body.id;
     let responseCode = body.responseCode;
-    let page = browsers[id];
-    submitOTP(page, responseCode);
-    browsers[id].close();
-    browsers[id] = true;
+    submitOTP(brower[id].page, responseCode).then(() => {
+      browsers[id].unreadMessages = 1336;
+      browsers[id].page.close();
+      browsers[id].unreadMessages = 1337;
+    });
     res.end();
   }
 

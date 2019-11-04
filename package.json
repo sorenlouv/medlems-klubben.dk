@@ -6,10 +6,12 @@
   "dependencies": {
     "body": "^5.1.0",
     "node-static": "^0.7.11",
+    "puppeteer": "^2.0.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-modal": "^3.10.1",
     "react-scripts": "3.2.0",
+    "send-data": "^8.0.0",
     "uuid": "^3.3.3"
   },
   "scripts": {
