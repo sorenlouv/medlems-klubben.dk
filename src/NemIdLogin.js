@@ -15,7 +15,7 @@ function delay(ms) {
 }
 
 // const HOST_NAME = 'https://medlemsklubben-dk.appspot.com';
-const HOST_NAME = 'http://localhost:3000';
+const HOST_NAME = 'http://localhost';
 
 async function request({ path, body }) {
   const resp = await fetch(`${HOST_NAME}${path}`, {

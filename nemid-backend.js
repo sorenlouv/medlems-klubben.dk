@@ -3,8 +3,9 @@ const static = require('node-static');
 const uuidv4 = require('uuid/v4')
 const jsonBody = require('body/json')
 
-const hostname = '127.0.0.1';
+const hostname = '0.0.0.0';
 const port = 8080;
+
 const file = new static.Server('./build');
 let browsers = {};
 
@@ -97,9 +98,6 @@ const server = http.createServer((req, res) => {
   } else {
     file.serve(req, res);
   }
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World!\n');
 });
 
 server.listen(port, hostname, () => {
