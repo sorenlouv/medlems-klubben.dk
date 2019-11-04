@@ -1,6 +1,7 @@
 const http = require('http');
 const static = require('node-static');
 const uuidv4 = require('uuid/v4')
+const jsonBody = require('body/json')
 
 const hostname = '127.0.0.1';
 const port = 8080;

@@ -4,10 +4,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body": "^5.1.0",
+    "node-static": "^0.7.11",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-modal": "^3.10.1",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "lint": "eslint ./src",
