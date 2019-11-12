@@ -15,25 +15,32 @@ async function browser(username, password) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
-  await page.goto('https://www.odensebib.dk/gatewayf/login?destination=frontpage');
-  const frame = page.frames().find(frame => frame.name() === 'nemid_iframe');
-  await frame.waitForSelector('.userid-pwd input:focus', { visible: true, timeout: 5000 });
-  await page.keyboard.type(username);
-  await page.keyboard.press('Tab');
-  await page.keyboard.type(password);
-  await page.keyboard.press('Enter');
-
+  await page.tracing.start({ path: 'trace.json', screenshots: true });
+  try {
+    await page.goto('https://www.odensebib.dk/gatewayf/login?destination=frontpage');
+    await page.waitForSelector('iframe#nemid_iframe');
+    const frame = page.frames().find(frame => frame.name() === 'nemid_iframe');
+    await frame.waitForSelector('.userid-pwd input:focus', { visible: true });
+    await page.keyboard.type(username);
+    await page.keyboard.press('Tab');
+    await page.keyboard.type(password);
+    await page.keyboard.press('Enter');
+  }
+  finally {
+    await page.tracing.stop();
+  }
   return page;
 }
 
 async function otpRequest(page) {
+  await page.waitForSelector('iframe#nemid_iframe');
   const frame = page.frames().find(frame => frame.name() === 'nemid_iframe');
-  await frame.waitForSelector('button', { visible: true, timeout: 2000 });
-  otp = await frame.querySelector('input.otp-input:focus', { visible: true });
+  await frame.waitForSelector('button', { visible: true });
+  otp = await frame.$('input.otp-input:focus', { visible: true });
   if (!otp) {
-    frame.click('a.link')
-    await frame.waitForSelector('input.otp-input:focus', { visible: true });
-    otp = await frame.querySelector('input.otp-input:focus', { visible: true });
+    // Switch from app to otp card mode.
+    await frame.click('a.link')
+    otp = await frame.waitForSelector('input.otp-input:focus', { visible: true });
   }
   otp_query = await otp.evaluate((node) => node.parentNode.previousSibling.innerText);
   return otp_query;
@@ -61,9 +68,9 @@ const server = http.createServer((req, res) => {
     sendJson(req, res, { id });
 
     browser(body.username, body.password).then(page => {
-      browser[id].page = page;
+      browsers[id].page = page;
       otpRequest(page).then(otpRequestCode => {
-        browser[id].otpRequestCode = otpRequestCode;
+        browsers[id].otpRequestCode = otpRequestCode;
       });
     });
   }
