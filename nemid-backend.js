@@ -12,8 +12,13 @@ const file = new static.Server('./build');
 let browsers = {};
 
 async function browser(username, password) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  const puppet = await puppeteer.launch({
+    slowMo: 250, // slow down by 250ms
+    timeout: 60000,
+    //headless: false,
+  });
+  const page = await puppet.newPage();
+  page.setDefaultTimeout(60000);
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
   await page.tracing.start({ path: 'trace.json', screenshots: true });
   try {
